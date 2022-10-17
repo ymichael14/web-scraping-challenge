@@ -1,12 +1,29 @@
-# import necessary libraries
-from flask import Flask, render_template
+from ast import Import
+from flask import Flask, render_template, redirect
+import scrape_all 
+
+
+import pymongo
 
 app = Flask(__name__)
 
+# connect to database
+conn='mongodb://localhost:27017'
+client = pymongo.MongoClient(conn)
+db=client.mars_facts_db
+db.planet_facts.drop()
+
 @app.route('/')
 def home():
-    movie_list=['Infinity War', 'The Replacements','Gone Girl', 'X-Men: Days of Future Past','Bad Boys 2']
-    return render_template('index.html', movie_list=movie_list)
+    data=db.planet_facts.find_one()
+    print(data)
+    return render_template('index.html', data=data)
+
+@app.route('/scrape')
+def get_data():
+    data=scrape_all.scrape()
+    db.planet_facts.insert_one(data)
+    return redirect('/', code=302)
 
 
 if __name__ == "__main__":
