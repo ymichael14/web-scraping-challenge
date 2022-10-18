@@ -1,4 +1,6 @@
 
+from cgitb import html
+from turtle import ht
 import pandas as pd
 from bs4 import BeautifulSoup
 from splinter import Browser
@@ -41,9 +43,9 @@ def image(browser):
 
 def facts(): 
     url='https://galaxyfacts-mars.com/'
-    mars_facts=pd.read_html(url)[1]
-    mars_facts.columns=['Metric', 'Value']
-    return mars_facts.to_html('mars_facts_from_web.html', index=False)
+    mars_facts=pd.read_html(url, header=0)[0]
+    html_fact= mars_facts.to_html('mars_facts_table.html', index=False)
+    return html_fact
      
 def hemisphere(browser):
     browser.visit('https://marshemispheres.com/')

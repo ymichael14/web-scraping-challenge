@@ -16,7 +16,6 @@ db.planet_facts.drop()
 @app.route('/')
 def home():
     data=db.planet_facts.find_one()
-    print(data)
     return render_template('index.html', data=data)
 
 @app.route('/scrape')
